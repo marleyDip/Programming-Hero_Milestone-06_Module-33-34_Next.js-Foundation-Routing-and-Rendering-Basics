@@ -1,0 +1,166 @@
+/* But don't move your Tailwind styling into this CSS - Keep layout, spacing, colors, responsive design in Tailwind.
+
+Use blogs.module.css mainly for things that are awkward or repetitive in Tailwind, such as:
+
+    - custom hover animations
+    - pseudo-elements (::before, ::after)
+    - blog-specific glow effects
+    - custom selection
+    - complex transitions
+
+That gives you a clean separation:
+
+    Tailwind
+        ↓
+    layout + spacing + colors + responsive UI
+
+    blogs.module.css
+        ↓
+    blog-specific effects + custom CSS
+
+*/
+
+/* =========================================
+   Blogs Section Styles
+   Scoped to /blogs using CSS Modules
+========================================= */
+
+/* Smooth scrolling inside the blogs section */
+.blogs {
+  scroll-behavior: smooth;
+}
+
+/* Blog Card */
+.blogCard {
+  transition:
+    transform 300ms ease,
+    border-color 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.blogCard:hover {
+  transform: translateY(-4px);
+}
+
+/* Blog Image */
+.blogImage {
+  transition: transform 700ms ease;
+}
+
+.blogCard:hover .blogImage {
+  transform: scale(1.05);
+}
+
+/* Blog Arrow */
+.arrow {
+  transition:
+    transform 300ms ease,
+    color 300ms ease;
+}
+
+.blogCard:hover .arrow {
+  transform: translateX(4px) scale(1.15);
+}
+
+/* Back Button Arrow */
+.backArrow {
+  transition: transform 500ms ease;
+}
+
+.backLink:hover .backArrow {
+  transform: translateX(-4px) scale(1.15) rotate(-360deg);
+}
+
+/* Gradient Divider */
+.divider {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(
+    to right,
+    rgb(236 72 153 / 0.6),
+    rgb(139 92 246 / 0.4),
+    transparent
+  );
+}
+
+/* Blog Hero Glow */
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: -120px;
+  left: -120px;
+  width: 280px;
+  height: 280px;
+  border-radius: 9999px;
+  background: rgb(236 72 153 / 0.08);
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  right: -120px;
+  bottom: -120px;
+  width: 280px;
+  height: 280px;
+  border-radius: 9999px;
+  background: rgb(124 58 237 / 0.08);
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+/* Blog Content */
+.content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Category Badge */
+.category {
+  transition:
+    border-color 300ms ease,
+    background-color 300ms ease,
+    color 300ms ease;
+}
+
+.category:hover {
+  border-color: rgb(236 72 153 / 0.5);
+  background-color: rgb(15 23 42 / 0.9);
+}
+
+/* Article Number */
+.articleNumber {
+  backdrop-filter: blur(8px);
+}
+
+/* Blog Title */
+.title {
+  text-wrap: balance;
+}
+
+/* Blog Description */
+.description {
+  text-wrap: pretty;
+}
+
+/* Custom Selection */
+.blogs ::selection {
+  background: rgb(236 72 153 / 0.25);
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .hero::before,
+  .hero::after {
+    width: 200px;
+    height: 200px;
+    filter: blur(60px);
+  }
+}
