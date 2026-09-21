@@ -1,47 +1,89 @@
+"use client";
+
 import Link from "next/link";
-import NavLink from "./NavLink";
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
+  const pathname = usePathname();
+
+  // Here, used anchor tag <a></a>, thats refresh every page when click on link.
+  /* const links = (
+    <>
+      <li>
+        <a href="/docs">Docs</a>
+      </li>
+
+      <li>
+        <a href="/showcase">Showcase</a>
+      </li>
+
+      <li>
+        <a href="/about">About</a>
+      </li>
+
+      <li>
+        <a href="/about/developer">Developer</a>
+      </li>
+
+      <li>
+        <a href="/about/designer">Designer</a>
+      </li>
+    </>
+  ); */
+
+  // To solve this, refresh issue used Link
   const links = (
     <>
       <li>
-        <NavLink href="/">Home</NavLink>
+        <Link className="text-blue-500" href="/">
+          Home
+        </Link>
       </li>
 
       <li>
-        <NavLink href="/blogs">Blogs</NavLink>
+        <Link
+          className={pathname === "/blogs" ? "text-lime-500" : ""}
+          href="/blogs"
+        >
+          Blogs
+        </Link>
       </li>
 
       <li>
-        <NavLink href="/users">Users</NavLink>
+        <Link
+          className={pathname === "/users" ? "text-orange-500" : ""}
+          href="/users"
+        >
+          Users
+        </Link>
       </li>
 
       <li>
         <details>
           <summary>About</summary>
 
-          <ul className="space-y-2">
+          <ul>
             <li>
-              <NavLink href="/about">About</NavLink>
+              <Link href="/about">About</Link>
             </li>
 
             <li>
-              <NavLink href="/about/image">Image</NavLink>
+              <Link href="/about/image">Image</Link>
             </li>
 
             <li>
-              <NavLink href="/about/image/component">Image Properties</NavLink>
+              <Link href="/about/image/component">Image Properties</Link>
             </li>
           </ul>
         </details>
       </li>
 
       <li>
-        <NavLink href="/dashboard">Dashboard</NavLink>
+        <Link href="/dashboard">Dashboard</Link>
       </li>
 
       <li>
-        <NavLink href="/showcase">Showcase</NavLink>
+        <Link href="/showcase">Showcase</Link>
       </li>
     </>
   );
@@ -72,7 +114,7 @@ const Navbar = () => {
 
           <ul
             tabIndex={-1}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow space-y-1.5"
+            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
           >
             {links}
           </ul>
@@ -86,7 +128,7 @@ const Navbar = () => {
 
       {/* Desktop menu */}
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1 space-x-1.5">{links}</ul>
+        <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
 
       {/* Navbar End - anchor tag navigates somewhere and if inside this site, used Link */}
