@@ -120,6 +120,8 @@ Full-Stack Web Development
 
 Learning React first helps me understand the foundation of Next.js, while learning Next.js teaches me how those React concepts can be used within a complete application framework.
 
+---
+
 ## What is a Layout?
 
 A **layout** is the overall arrangement or structure of different elements within a space.
@@ -295,6 +297,170 @@ RootLayout
 
 ---
 
+## Small Page Rendering Example
+
+Let's understand what actually happens when we visit a page.
+
+Suppose we have this structure:
+
+```text
+app/
+├── layout.tsx
+├── page.tsx
+└── about/
+    └── page.tsx
+```
+
+### `layout.tsx`
+
+```tsx
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body>
+        <header>Navbar</header>
+
+        <main>{children}</main>
+
+        <footer>Footer</footer>
+      </body>
+    </html>
+  );
+}
+```
+
+### Home page
+
+```tsx
+// app/page.tsx
+
+export default function HomePage() {
+  return <h1>Home Page</h1>;
+}
+```
+
+### About page
+
+```tsx
+// app/about/page.tsx
+
+export default function AboutPage() {
+  return <h1>About Page</h1>;
+}
+```
+
+### When we visit `/`
+
+Next.js effectively renders:
+
+```text
+RootLayout
+│
+├── Navbar
+│
+├── HomePage
+│     └── "Home Page"
+│
+└── Footer
+```
+
+The resulting UI is conceptually:
+
+```text
+┌─────────────────────────┐
+│         Navbar          │
+├─────────────────────────┤
+│                         │
+│       Home Page         │
+│                         │
+├─────────────────────────┤
+│         Footer          │
+└─────────────────────────┘
+```
+
+### When we visit `/about`
+
+Next.js uses the same layout but changes the page content:
+
+```text
+RootLayout
+│
+├── Navbar
+│
+├── AboutPage
+│     └── "About Page"
+│
+└── Footer
+```
+
+The resulting UI becomes:
+
+```text
+┌─────────────────────────┐
+│         Navbar          │
+├─────────────────────────┤
+│                         │
+│       About Page        │
+│                         │
+├─────────────────────────┤
+│         Footer          │
+└─────────────────────────┘
+```
+
+### The important idea
+
+The **layout stays the same**, while the **page content changes**.
+
+```text
+                    Root Layout
+                         │
+             ┌───────────┴───────────┐
+             │                       │
+          Navbar                  Footer
+             │
+             ↓
+          {children}
+             │
+       ┌─────┴─────┐
+       ↓           ↓
+    Home Page   About Page
+       /            /about
+```
+
+So we can think of Next.js rendering like this:
+
+```text
+URL
+ ↓
+Find matching page
+ ↓
+Put page inside its layout
+ ↓
+Render the resulting UI
+```
+
+For `/about`:
+
+```text
+/about
+  ↓
+app/about/page.tsx
+  ↓
+app/layout.tsx
+  ↓
+Layout + About Page
+  ↓
+Rendered UI
+```
+
+This is the fundamental idea behind **layouts and nested layouts in the Next.js App Router**.
+
+---
+
 ## Nested Layouts
 
 Next.js also allows layouts to exist inside other layouts.
@@ -314,7 +480,7 @@ app/
         └── page.tsx
 ```
 
-This can create a structure like:
+The rendering relationship can be understood as:
 
 ```text id="k6w2ns"
 Root Layout
@@ -332,6 +498,26 @@ Root Layout
      └── Settings Page
 │
 └── Footer
+```
+
+For `/dashboard`:
+
+```text
+Root Layout
+   ↓
+Dashboard Layout
+   ↓
+Dashboard Page
+```
+
+For `/dashboard/settings`:
+
+```text
+Root Layout
+   ↓
+Dashboard Layout
+   ↓
+Settings Page
 ```
 
 This is useful because different sections of an application can have different shared structures.
@@ -394,7 +580,7 @@ The common structure is defined once, while the page-specific content changes.
 
 ---
 
-## My Learning Understanding
+## My Learning Summary
 
 The important distinction I learned is that **layout is a general concept**, while **Next.js Layout is a specific implementation of that concept**.
 
@@ -419,6 +605,21 @@ Shared UI across routes
 So, when I hear **"layout"** in web development, I should first think about **structure and arrangement**.
 
 When I hear **"Next.js layout"**, I should think about **a reusable `layout.tsx` component that wraps pages and provides shared UI and structure**.
+
+The most important rendering concept to remember is:
+
+```text
+URL
+ ↓
+Route
+ ↓
+Page
+ ↓
+Layout wraps Page
+ ↓
+Rendered UI
+
+---
 
 ## ⚡Next.js Architecture: App Router vs. Pages Router
 
@@ -554,3 +755,823 @@ export default async function ProductsPage() {
   );
 }
 ```
+
+---
+
+## Data Fetching, Params, SSR & CSR in Next.js
+
+### 1. What is Data Fetching?
+
+**Data fetching** means getting data from a source so that we can use it in our application.
+
+The data can come from:
+
+- REST API
+- Database
+- GraphQL API
+- External service
+- Local file
+- Backend server
+
+For example:
+
+```text
+Next.js Application
+       ↓
+    Request
+       ↓
+     API
+       ↓
+     Data
+       ↓
+    Render UI
+```
+
+Example API:
+
+```text
+https://api.example.com/products
+```
+
+We can fetch the products and display them on our page.
+
+---
+
+### 2. Data Fetching in Next.js
+
+Next.js supports different ways of fetching and rendering data.
+
+The important question is:
+
+> **Where does the data fetching happen?**
+
+It can happen on the **server** or in the **browser/client**.
+
+```text
+                 Data Fetching
+                      │
+             ┌────────┴────────┐
+             ↓                 ↓
+          Server             Client
+             ↓                 ↓
+            SSR              CSR
+```
+
+---
+
+### 3. SSR — Server-Side Rendering
+
+**SSR (Server-Side Rendering)** means the server prepares the page with its data before sending the result to the browser.
+
+A simplified flow is:
+
+```text
+Browser
+   │
+   │ Request /products
+   ↓
+Next.js Server
+   │
+   │ Fetch data
+   ↓
+API / Database
+   │
+   │ Data
+   ↓
+Next.js Server
+   │
+   │ Render page
+   ↓
+Browser
+   │
+   ↓
+Rendered UI
+```
+
+For example:
+
+```tsx
+// app/products/page.tsx
+
+export default async function ProductsPage() {
+  const response = await fetch(
+    "https://api.example.com/products"
+  );
+
+  const products = await response.json();
+
+  return (
+    <div>
+      {products.map((product: any) => (
+        <h2 key={product.id}>
+          {product.name}
+        </h2>
+      ))}
+    </div>
+  );
+}
+```
+
+The important point is that this component can fetch data on the **server** because App Router components are Server Components by default.
+
+---
+
+### 4. CSR — Client-Side Rendering
+
+**CSR (Client-Side Rendering)** means the browser loads the JavaScript application and then fetches data from the client.
+
+The flow looks like:
+
+```text
+Browser
+   │
+   │ Request page
+   ↓
+Next.js Server
+   │
+   │ Send application
+   ↓
+Browser
+   │
+   │ JavaScript runs
+   ↓
+API
+   │
+   │ Data
+   ↓
+Browser
+   │
+   ↓
+Update UI
+```
+
+For example:
+
+```tsx
+"use client";
+
+import { useEffect, useState } from "react";
+
+export default function ProductsPage() {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    fetch("https://api.example.com/products")
+      .then((response) => response.json())
+      .then((data) => setProducts(data));
+  }, []);
+
+  return (
+    <div>
+      {products.map((product: any) => (
+        <h2 key={product.id}>
+          {product.name}
+        </h2>
+      ))}
+    </div>
+  );
+}
+```
+
+Here:
+
+```text
+useEffect()
+    ↓
+Browser fetches API
+    ↓
+Data arrives
+    ↓
+setProducts()
+    ↓
+Component re-renders
+```
+
+---
+
+### 5. SSR vs CSR
+
+| SSR | CSR |
+| --- | --- |
+| Data is fetched on the server | Data is fetched in the browser |
+| Server prepares the UI | Browser prepares/updates the UI |
+| Can keep server-only data access on the server | API requests happen from the client |
+| Useful for server-rendered content | Useful for highly interactive client-side UI |
+| Does not require `useEffect` for server fetching | Often uses `useEffect` or a client data-fetching library |
+
+The choice depends on the application's requirements. Next.js allows both approaches.
+
+---
+
+### 6. What are `params`?
+
+`params` are **dynamic values extracted from a URL path**.
+
+Suppose we have:
+
+```text
+/products/101
+```
+
+Here:
+
+```text
+101
+```
+
+can represent a product ID.
+
+We can create a dynamic route:
+
+```text
+app/
+└── products/
+    └── [id]/
+        └── page.tsx
+```
+
+The `[id]` means:
+
+> "This part of the URL is dynamic."
+
+So these URLs can use the same page:
+
+```text
+/products/101
+/products/102
+/products/103
+```
+
+---
+
+### 7. How `params` Work
+
+Suppose the user visits:
+
+```text
+/products/101
+```
+
+Next.js matches:
+
+```text
+app/products/[id]/page.tsx
+```
+
+and provides the dynamic value through `params`.
+
+Conceptually:
+
+```text
+URL
+ ↓
+/products/101
+ ↓
+[id] = 101
+ ↓
+params.id = "101"
+```
+
+Example:
+
+```tsx
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  return <h1>Product ID: {id}</h1>;
+}
+```
+
+The important idea is:
+
+```text
+/products/101
+      ↓
+params
+      ↓
+{ id: "101" }
+```
+
+---
+
+### 8. `params` + Data Fetching
+
+This is where `params` becomes especially useful.
+
+Suppose we want to display a specific product.
+
+URL:
+
+```text
+/products/101
+```
+
+Route:
+
+```text
+app/products/[id]/page.tsx
+```
+
+We can use the ID to request the correct product:
+
+```tsx
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  const response = await fetch(
+    `https://api.example.com/products/${id}`
+  );
+
+  const product = await response.json();
+
+  return (
+    <div>
+      <h1>{product.name}</h1>
+      <p>{product.price}</p>
+    </div>
+  );
+}
+```
+
+The complete flow is:
+
+```text
+User visits
+/products/101
+       ↓
+Next.js matches
+[ id ]
+       ↓
+params.id
+       ↓
+"101"
+       ↓
+Fetch
+/api/products/101
+       ↓
+Product data
+       ↓
+Render Product Page
+```
+
+This is a very important pattern in Next.js.
+
+---
+
+### 9. `params` in CSR
+
+`params` and CSR are separate concepts.
+
+`params` come from the **route**, while CSR describes **where rendering/data fetching happens**.
+
+For example, a dynamic route can still contain a Client Component:
+
+```text
+app/
+└── products/
+    └── [id]/
+        └── page.tsx
+```
+
+The page can receive the route parameter and pass it to a Client Component.
+
+```tsx
+// page.tsx
+
+import ProductDetails from "./ProductDetails";
+
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  return <ProductDetails id={id} />;
+}
+```
+
+Then:
+
+```tsx
+"use client";
+
+import { useEffect, useState } from "react";
+
+export default function ProductDetails({
+  id,
+}: {
+  id: string;
+}) {
+  const [product, setProduct] = useState(null);
+
+  useEffect(() => {
+    fetch(`/api/products/${id}`)
+      .then((res) => res.json())
+      .then((data) => setProduct(data));
+  }, [id]);
+
+  return <div>{product?.name}</div>;
+}
+```
+
+Now the route parameter comes from Next.js, but the actual data fetching happens in the browser.
+
+---
+
+## 10. SSR and CSR — Simple Mental Model
+
+### SSR Definition
+
+Think:
+
+```text
+Request
+   ↓
+Server
+   ↓
+Fetch Data
+   ↓
+Render
+   ↓
+Browser
+```
+
+### CSR
+
+Think:
+
+```text
+Request
+   ↓
+Browser
+   ↓
+JavaScript
+   ↓
+Fetch Data
+   ↓
+Update UI
+```
+
+---
+
+## 11. `params` vs `searchParams`
+
+These are easy to confuse.
+
+### `params`
+
+Values come from the **URL path**.
+
+>**`Route parameters`** are dynamic placeholder segments of a URL path used to identify or capture a specific resource or values.
+
+```text
+/products/101
+         ↑
+      route value
+```
+
+Used to identify a specific resource.
+
+```text
+params.id
+↓
+101
+```
+
+Route:
+
+```text
+app/products/[id]/page.tsx
+```
+
+### Query String Parameters (`searchParams`)
+
+Values come from the **query string**.
+
+> **`URL Parameters`** / **`Query Parameters`** are extra pieces of data added to the end of a web address to pass information to a website or server.
+
+Structure
+
+- Question mark (?): Marks the start of the query string.
+- Key-value pairs: Written as key=value.
+- Ampersand (&): Separates multiple parameters from each other.
+
+```text
+/products?category=phone&sort=price
+         ↑
+    query parameter
+```
+
+Here:
+
+- ? = query string begins
+- category = parameter name or key
+- phone = parameter value
+- & = separator
+
+Usually used for things such as:
+
+- Filtering
+- Searching
+- Sorting
+- Pagination
+- Optional settings
+
+```text
+/products?category=phone&sort=price
+         └───────────────┘
+            query string
+```
+
+The query parameters are:
+
+```text
+category = phone
+sort = price
+```
+
+They come after the `?`.
+
+Multiple query parameters are separated by `&`.
+
+Example:
+
+```tsx
+// In Next.js, query strings are available through `searchParams`.
+export default async function ProductsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string }>;
+}) {
+  const { category } = await searchParams;
+
+  return <h1>Category: {category}</h1>;
+}
+```
+
+Conceptually:
+
+```text
+searchParams
+    ↓
+category = "phone"
+sort = "price"
+```
+
+So:
+
+```text
+/products/101
+      ↑
+    params
+```
+
+while:
+
+```text
+/products?category=phone
+         ↑
+   searchParams
+```
+
+```text
+URL
+ │
+ ├── Path
+ │     ↓
+ │   Route Parameter
+ │     ↓
+ │   params
+ │
+ └── Query String
+       ↓
+     Query Parameter
+       ↓
+     searchParams
+```
+
+A simple way to remember:
+
+> **`params` = dynamic path values**  
+> **`searchParams` = query-string values**
+> **`Route parameter` = identify something.**
+> **`Query parameter` = filter, search, sort, or modify something.**
+
+```text
+Route Parameter
+      ↓
+Part of the URL path
+      ↓
+[dynamic]
+      ↓
+params
+
+
+Query Parameter
+      ↓
+Part of the query string
+      ↓
+?key=value
+      ↓
+searchParams
+```
+
+Simple Comparison
+
+| Route Parameter | Query Parameter |
+| --- | --- |
+| Part of the URL path | Comes after `?` |
+| Uses dynamic route `[id]` | Uses `searchParams` |
+| `/products/101` | `/products?category=phone` |
+| Often identifies a resource | Often filters or modifies results |
+| `params.id` | `searchParams.category` |
+
+---
+
+### 12. Using Route and URL Parameters Together
+
+We can use both in the same URL.
+
+Example:
+
+```text
+/products/101?review=latest
+```
+
+Here:
+
+```text
+101
+```
+
+is the **route parameter**.
+
+And:
+
+```text
+review=latest
+```
+
+is the **query parameter**.
+
+Conceptually:
+
+```text
+/products/101?review=latest
+         │          │
+         │          └── Query parameter
+         │
+         └── Route parameter
+```
+
+The page could receive both:
+
+```tsx
+export default async function ProductPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ review?: string }>;
+}) {
+  const { id } = await params;
+  const { review } = await searchParams;
+
+  return (
+    <div>
+      <h1>Product: {id}</h1>
+      <p>Review: {review}</p>
+    </div>
+  );
+}
+```
+
+For:
+
+```text
+/products/101?review=latest
+```
+
+we get:
+
+```text
+params.id = "101"
+
+searchParams.review = "latest"
+```
+
+---
+
+### 13. Complete Mental Model
+
+The overall relationship can be understood like this:
+
+```text
+                         Next.js
+                            │
+              ┌─────────────┴─────────────┐
+              ↓                           ↓
+           Routing                    Rendering
+              │                           │
+              ↓                     ┌─────┴─────┐
+           params                    ↓           ↓
+              │                     SSR         CSR
+              ↓
+       Dynamic URL value
+              │
+              ↓
+        Data Fetching
+              │
+       ┌──────┴──────┐
+       ↓             ↓
+    Server         Client
+```
+
+For a product page:
+
+```text
+/products/101
+      ↓
+Dynamic Route
+      ↓
+params.id = "101"
+      ↓
+Fetch product 101
+      ↓
+Render Product UI
+```
+
+---
+
+## My Learning Understanding
+
+The key concepts I learned are:
+
+### Data Fetching Summary
+
+> Getting data from an API, database, or another source so that the application can display or use it.
+
+### SSR Summary
+
+> The server fetches data and renders the page before sending the result to the browser.
+
+### CSR Summary
+
+> The browser runs JavaScript and fetches/updates data on the client side.
+
+### `params` Summary
+
+> Dynamic values extracted from the URL path.
+
+### `searchParams`
+
+> Values extracted from the URL query string.
+
+The most useful mental model is:
+
+```text
+URL
+ ↓
+Routing
+ ↓
+params
+ ↓
+Identify the resource
+ ↓
+Data Fetching
+ ↓
+SSR or CSR
+ ↓
+Render UI
+```
+
+For example:
+
+```text
+/products/101
+      ↓
+params.id = "101"
+      ↓
+Fetch product 101
+      ↓
+      ┌─────────┐
+      ↓         ↓
+    Server    Browser
+      ↓         ↓
+     SSR       CSR
+      ↓         ↓
+       Product UI
+```
+
+Understanding this flow is more important than memorizing individual Next.js APIs. Once this becomes clear, concepts such as **dynamic routes, Server Components, Client Components, `useEffect`, API routes, caching, and loading states** become much easier to understand.
+
+---
