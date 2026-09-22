@@ -9,6 +9,7 @@ The easiest way to remember the whole concept:
 > **`Hydration` → Connecting React's client-side behavior to existing UI and make it interactive**
 ---
 > **`Re-render` → Updating the UI after state/props change**
+---
 
 ## 1. What is Rendering?
 
@@ -18,9 +19,9 @@ Rendering in Next JS
 
 - [x] Client Side Rendering (CSR)
 - [x] Server Side Rendering (SSR) / Dynamic Rendering
-- [] Static Site Generation (SSG)
-- [] Incremental Static Regeneration (ISR)
-- [] Partial Pre-rendering (PPR)
+- [ ] Static Site Generation (SSG)
+- [ ] Incremental Static Regeneration (ISR)
+- [ ] Partial Pre-rendering (PPR)
 
 For example:
 
@@ -329,34 +330,134 @@ Interaction
 UI updates
 ```
 
-### Server and Client Components Work on Next.js
+### Next.js Components → RSC Payload → Browser
+
+The App Router uses **Server Components by default**. Client Components are used when we need interactivity such as state, event handlers, or browser APIs.
+
+## 🔄 How Server and Client Components Work
 
 ```text
-Next JS Components
-
-- Server Component
-- Client Component
-
-  │
-  │
-  ▼
-
-React Server Component (RSC) Payload
-
-- Rendered Server Component.
-- Placeholders for client Components.
-- Any props passed through Server component to Client component.
-
-  │
-  │
-  ▼
-
-Browser (Client)
-
-- Immediate showing of Server Rendered HTML.
-- RSC payload to reconcile component trees.
-- JavaScript hydrate the Client component.
+┌───────────────────────────────────────────────┐
+│                 NEXT.JS SERVER                │
+│                                               │
+│  Server Components        Client Components   │
+│         │                        │            │
+│         └────────────┬───────────┘            │
+│                      ▼                        │
+│              React Server Components          │
+│                    (RSC)                      │
+│                      │                        │
+│                      ▼                        │
+│                RSC PAYLOAD                    │
+│                                               │
+│  • Rendered Server Component information      │
+│  • Placeholders for Client Components         │
+│  • Any Props passed through Server Components │
+│    to Client Components                       │
+└──────────────────────┬────────────────────────┘
+                       │
+              ┌────────┴─────────┐
+              │                  │
+              │ HTML             │ RSC Payload
+              │                  │ + Client JS
+              ▼                  ▼
+┌───────────────────────────────────────────────┐
+│                  BROWSER                      │
+│                                               │
+│  ┌─────────────────────────────────────────┐  │
+│  │        1. Initial UI appears            │  │
+│  │                                         │  │
+│  │   Server-rendered HTML is displayed     │  │
+│  └─────────────────────────────────────────┘  │
+│                       │                       │
+│                       ▼                       │
+│  ┌─────────────────────────────────────────┐  │
+│  │        2. RSC Payload is processed      │  │
+│  │                                         │  │
+│  │   React uses it to understand and       │  │
+│  │   reconcile the component tree          │  │
+│  └─────────────────────────────────────────┘  │
+│                       │                       │
+│                       ▼                       │
+│  ┌─────────────────────────────────────────┐  │
+│  │        3. Client Components hydrate     │  │
+│  │                                         │  │
+│  │   JavaScript attaches behavior such     │  │
+│  │   as state and event handlers           │  │
+│  └─────────────────────────────────────────┘  │
+│                       │                       │
+│                       ▼                       │
+│                INTERACTIVE PAGE               │
+│                                               │
+└───────────────────────────────────────────────┘
 ```
+
+---
+
+## 🧠 Simple Mental Model
+
+```text
+Next.js Server
+      │
+      ├── Server Components
+      │
+      └── Client Components
+              │
+              ▼
+        RSC Payload
+              │
+              ├── Server Component information
+              ├── Client Component placeholders
+              └── Props
+              │
+              ▼
+          Browser
+              │
+       ┌──────┴───────┐
+       │              │
+       ▼              ▼
+   HTML appears    RSC Payload
+       │              │
+       │              ▼
+       │       Reconcile component tree
+       │              │
+       └──────┬───────┘
+              ▼
+       Client JS loads
+              │
+              ▼
+          Hydration
+              │
+              ▼
+      Interactive UI
+```
+
+### 🔑 Remember
+
+```text
+Server Components
+       ↓
+Generate server-side UI information
+
+RSC Payload
+       ↓
+Describes the Server/Client component tree
+
+HTML
+       ↓
+Lets the browser show the initial UI
+
+Client JavaScript
+       ↓
+Hydrates Client Components
+
+Hydration
+       ↓
+Makes Client Components interactive
+```
+
+> **RSC Payload is not the same thing as HTML.**
+> HTML lets the browser display the initial UI, while the RSC Payload carries information React uses to reconstruct/reconcile the component tree on the client.
 
 ---
 
