@@ -759,6 +759,630 @@ export default async function ProductsPage() {
 
 ---
 
+## Routing, Navigation, Nested Routing and Dynamic Routing in Next.js
+
+## 1. What is Routing?
+
+**Routing** means deciding **which page should be displayed for a particular URL**.
+
+For example:
+
+```text
+/           → Home Page
+/about      → About Page
+/contact    → Contact Page
+/products   → Products Page
+```
+
+In Next.js App Router, routing is mainly based on the **folder structure** inside the `app` directory.
+
+Example:
+
+```text
+app/
+├── page.tsx
+├── about/
+│   └── page.tsx
+├── contact/
+│   └── page.tsx
+└── products/
+    └── page.tsx
+```
+
+This creates:
+
+```text
+/           → app/page.tsx
+/about      → app/about/page.tsx
+/contact    → app/contact/page.tsx
+/products   → app/products/page.tsx
+```
+
+### Simple Mental Model
+
+```text
+Folder Structure
+       ↓
+      Route
+       ↓
+      URL
+       ↓
+      Page
+```
+
+So, in Next.js:
+
+> **Folders help define the URL structure, and `page.tsx` defines the UI for that route.**
+
+---
+
+## 2. What is Navigation?
+
+**Navigation** means moving from one route/page to another.
+
+For example:
+
+```text
+Home
+  ↓
+About
+  ↓
+Products
+  ↓
+Contact
+```
+
+In a website, navigation usually happens when the user clicks:
+
+- Navbar links
+- Buttons
+- Menu items
+- Cards
+- Other links
+
+---
+
+### Navigation with `Link`
+
+Next.js provides the `Link` component for navigation.
+
+```tsx
+import Link from "next/link";
+
+export default function Navbar() {
+  return (
+    <nav>
+      <Link href="/">Home</Link>
+      <Link href="/about">About</Link>
+      <Link href="/products">Products</Link>
+    </nav>
+  );
+}
+```
+
+When the user clicks:
+
+```text
+Products
+    ↓
+/products
+    ↓
+app/products/page.tsx
+```
+
+### Why use `Link`?
+
+Instead of manually using:
+
+```html
+<a href="/products">Products</a>
+```
+
+Next.js applications commonly use:
+
+```tsx
+<Link href="/products">Products</Link>
+```
+
+because Next.js can handle navigation within the application more efficiently.
+
+### Routing vs Navigation
+
+These two concepts are related but different.
+
+**Routing**:
+
+> Defines which page belongs to which URL.
+
+**Navigation**:
+
+> Moves the user from one URL/route to another.
+
+Think:
+
+```text
+Routing
+"Where should this URL go?"
+
+Navigation
+"How do I move there?"
+```
+
+---
+
+## 3. What is Nested Routing?
+
+**Nested routing** means creating routes inside another route.
+
+For example, imagine an admin dashboard:
+
+```text
+/dashboard
+/dashboard/profile
+/dashboard/settings
+/dashboard/users
+```
+
+The routes are nested under `/dashboard`.
+
+Folder structure:
+
+```text
+app/
+└── dashboard/
+    ├── page.tsx
+    ├── profile/
+    │   └── page.tsx
+    ├── settings/
+    │   └── page.tsx
+    └── users/
+        └── page.tsx
+```
+
+This creates:
+
+```text
+/dashboard           → Dashboard
+/dashboard/profile   → Profile
+/dashboard/settings  → Settings
+/dashboard/users     → Users
+```
+
+### Mental Model
+
+```text
+/dashboard
+     │
+     ├── /profile
+     │
+     ├── /settings
+     │
+     └── /users
+```
+
+The child routes are **nested inside** the parent route.
+
+---
+
+## 4. Nested Routing with Layout
+
+Nested routing becomes especially useful when combined with **nested layouts**.
+
+For example:
+
+```text
+app/
+├── layout.tsx
+└── dashboard/
+    ├── layout.tsx
+    ├── page.tsx
+    ├── profile/
+    │   └── page.tsx
+    └── settings/
+        └── page.tsx
+```
+
+We can have:
+
+```text
+Root Layout
+     ↓
+Dashboard Layout
+     ↓
+Dashboard Page
+```
+
+or:
+
+```text
+Root Layout
+     ↓
+Dashboard Layout
+     ↓
+Profile Page
+```
+
+So the dashboard sidebar can remain visible while the dashboard page changes.
+
+```text
+┌─────────────────────────────┐
+│         Navbar              │
+├──────────┬──────────────────┤
+│ Sidebar  │                  │
+│          │   Page Content   │
+│ Profile  │                  │
+│ Settings │                  │
+│ Users    │                  │
+└──────────┴──────────────────┘
+```
+
+This is one of the reasons nested routing and layouts are powerful in Next.js.
+
+---
+
+## 5. What is Dynamic Routing?
+
+Sometimes we don't know the exact URL value beforehand.
+
+For example, a product website might have:
+
+```text
+/products/101
+/products/102
+/products/103
+```
+
+Creating separate folders for every product would not make sense.
+
+Instead, we create a **dynamic route**.
+
+```text
+app/
+└── products/
+    └── [id]/
+        └── page.tsx
+```
+
+The `[id]` means:
+
+> This part of the URL is dynamic.
+
+Now the same page can handle:
+
+```text
+/products/101
+/products/102
+/products/103
+```
+
+---
+
+## 6. Getting the Dynamic Parameter
+
+Suppose the user visits:
+
+```text
+/products/101
+```
+
+Next.js gives us:
+
+```text
+params.id = "101"
+```
+
+Example:
+
+```tsx
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  return <h1>Product ID: {id}</h1>;
+}
+```
+
+For:
+
+```text
+/products/101
+```
+
+the result is:
+
+```text
+Product ID: 101
+```
+
+For:
+
+```text
+/products/500
+```
+
+the same page receives:
+
+```text
+Product ID: 500
+```
+
+### Dynamic Route Flow
+
+```text
+/products/101
+       ↓
+   [id] route
+       ↓
+params.id
+       ↓
+    "101"
+       ↓
+Product Page
+```
+
+---
+
+## 7. Dynamic Routing + Data Fetching
+
+Dynamic routing becomes very useful when working with APIs.
+
+Suppose:
+
+```text
+/products/101
+```
+
+Here:
+
+```text
+id = 101
+```
+
+We can use the ID to fetch that specific product.
+
+```tsx
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  const response = await fetch(
+    `https://api.example.com/products/${id}`
+  );
+
+  const product = await response.json();
+
+  return (
+    <div>
+      <h1>{product.name}</h1>
+      <p>{product.price}</p>
+    </div>
+  );
+}
+```
+
+The complete flow:
+
+```text
+/products/101
+      ↓
+Dynamic Route [id]
+      ↓
+params.id = "101"
+      ↓
+Fetch product 101
+      ↓
+Product data
+      ↓
+Render Product Page
+```
+
+---
+
+## 8. Dynamic Nested Routing
+
+We can also combine nested and dynamic routing.
+
+Imagine a blog:
+
+```text
+/blog
+/blog/react
+/blog/nextjs
+/blog/typescript
+```
+
+Folder structure:
+
+```text
+app/
+└── blog/
+    └── [slug]/
+        └── page.tsx
+```
+
+Here:
+
+```text
+/blog/react
+      ↓
+slug = "react"
+
+/blog/nextjs
+      ↓
+slug = "nextjs"
+```
+
+We can go even deeper:
+
+```text
+/blog/[slug]/comments
+```
+
+Folder structure:
+
+```text
+app/
+└── blog/
+    └── [slug]/
+        ├── page.tsx
+        └── comments/
+            └── page.tsx
+```
+
+Routes:
+
+```text
+/blog/react
+/blog/react/comments
+
+/blog/nextjs
+/blog/nextjs/comments
+```
+
+This is **dynamic + nested routing**.
+
+---
+
+## 9. Complete Routing Picture
+
+Now we can connect everything:
+
+```text
+                         Routing
+                            │
+             ┌──────────────┼──────────────┐
+             ↓              ↓              ↓
+          Static          Nested         Dynamic
+             │              │              │
+             ↓              ↓              ↓
+          /about        /dashboard      /products/[id]
+                            │              │
+                            ↓              ↓
+                       /dashboard/      /products/101
+                         profile
+```
+
+---
+
+## 10. Routing vs Navigation vs Nested vs Dynamic
+
+| Concept | Meaning | Example |
+| --- | --- | --- |
+| **Routing** | Maps URL to a page | `/about` |
+| **Navigation** | Moves between routes | Home → About |
+| **Nested Routing** | Routes inside another route | `/dashboard/profile` |
+| **Dynamic Routing** | Route contains a dynamic value | `/products/101` |
+| **Dynamic + Nested** | Dynamic route with child routes | `/blog/react/comments` |
+
+---
+
+## 11. Final Mental Model
+
+Think about building an e-commerce website.
+
+### Routing
+
+```text
+/products
+```
+
+→ Products page.
+
+### Navigation
+
+```text
+Home → Products
+```
+
+→ User moves to the Products page.
+
+### Nested Routing
+
+```text
+/dashboard
+/dashboard/orders
+/dashboard/settings
+```
+
+→ Routes are organized under Dashboard.
+
+### Dynamic Routing
+
+```text
+/products/101
+/products/102
+/products/103
+```
+
+→ One dynamic page handles different product IDs.
+
+### Everything Together
+
+```text
+User
+ │
+ │ clicks Product
+ ↓
+Navigation
+ │
+ ↓
+/products/101
+ │
+ ↓
+Routing
+ │
+ ↓
+products/[id]
+ │
+ ↓
+params.id = "101"
+ │
+ ↓
+Data Fetching
+ │
+ ↓
+Product 101
+ │
+ ↓
+Render UI
+```
+
+## Key Takeaways
+
+> **Routing** = deciding which UI belongs to a URL.
+---
+> **Navigation** = moving from one route to another.
+---
+> **Nested Routing** = creating routes inside another route.
+---
+> **Dynamic Routing** = using dynamic values in the URL with `[param]`.
+
+The most important pattern to remember is:
+
+```text
+Folder Structure
+      ↓
+     Route
+      ↓
+      URL
+      ↓
+Navigation
+      ↓
+Dynamic/Nested Parameters
+      ↓
+Data Fetching
+      ↓
+      UI
+```
+
+---
+
 ## Data Fetching, Params and searchParams, SSR & CSR in Next.js
 
 ### 1. What is Data Fetching?
@@ -1738,7 +2362,7 @@ SSR or CSR
 Display products
 ```
 
-### Key Takeaways
+### Data Fetching and Rendering Key Takeaways
 
 > **`searchParams`** → reads values from the URL query string.
 ---
