@@ -618,6 +618,7 @@ Page
 Layout wraps Page
  ↓
 Rendered UI
+```
 
 ---
 
@@ -758,7 +759,7 @@ export default async function ProductsPage() {
 
 ---
 
-## Data Fetching, Params, SSR & CSR in Next.js
+## Data Fetching, Params and searchParams, SSR & CSR in Next.js
 
 ### 1. What is Data Fetching?
 
@@ -1189,7 +1190,7 @@ Now the route parameter comes from Next.js, but the actual data fetching happens
 
 ## 10. SSR and CSR — Simple Mental Model
 
-### SSR Definition
+### SSR with params
 
 Think:
 
@@ -1205,7 +1206,7 @@ Render
 Browser
 ```
 
-### CSR
+### CSR with params
 
 Think:
 
@@ -1223,7 +1224,547 @@ Update UI
 
 ---
 
-## 11. `params` vs `searchParams`
+### 11. What is `searchParams`?
+
+`searchParams` are values that come from the **query string** of a URL.
+
+Example:
+
+```text
+/products?category=phone
+```
+
+Here:
+
+```text
+category = phone
+```
+
+is a query parameter.
+
+Another example:
+
+```text
+/products?category=phone&sort=price
+```
+
+We have two query parameters:
+
+```text
+category = phone
+sort = price
+```
+
+The basic structure is:
+
+```text
+/products?category=phone&sort=price
+         └──────────────────────┘
+              searchParams
+```
+
+---
+
+### 12. Getting `searchParams` in Next.js
+
+In the App Router, a page can receive `searchParams`.
+
+```tsx
+export default async function ProductsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    category?: string;
+  }>;
+}) {
+  const { category } = await searchParams;
+
+  return <h1>Category: {category}</h1>;
+}
+```
+
+If the URL is:
+
+```text
+/products?category=phone
+```
+
+Then:
+
+```text
+searchParams.category
+        ↓
+     "phone"
+```
+
+---
+
+### 13. `searchParams` + Data Fetching
+
+This is where `searchParams` becomes useful.
+
+Suppose we have:
+
+```text
+/products?category=phone
+```
+
+We can use the category to fetch the correct products.
+
+```tsx
+export default async function ProductsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    category?: string;
+  }>;
+}) {
+  const { category } = await searchParams;
+
+  const response = await fetch(
+    `https://api.example.com/products?category=${category}`
+  );
+
+  const products = await response.json();
+
+  return (
+    <div>
+      <h1>{category} Products</h1>
+
+      {products.map((product: any) => (
+        <h2 key={product.id}>{product.name}</h2>
+      ))}
+    </div>
+  );
+}
+```
+
+The complete flow:
+
+```text
+/products?category=phone
+          ↓
+   searchParams
+          ↓
+category = "phone"
+          ↓
+      fetch()
+          ↓
+API
+          ↓
+Phone products
+          ↓
+      Render UI
+```
+
+---
+
+### 14. `searchParams` + SSR
+
+When the data is fetched on the **server**, the server can use `searchParams` to fetch the required data before rendering the page.
+
+Example:
+
+```text
+Browser
+   │
+   │ /products?category=phone
+   ↓
+Next.js Server
+   │
+   │ searchParams.category
+   ↓
+"phone"
+   │
+   │ fetch()
+   ↓
+API
+   │
+   │ Phone products
+   ↓
+Next.js Server
+   │
+   │ Render
+   ↓
+Browser
+   │
+   ↓
+Product UI
+```
+
+Example:
+
+```tsx
+export default async function ProductsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    category?: string;
+  }>;
+}) {
+  const { category } = await searchParams;
+
+  const response = await fetch(
+    `https://api.example.com/products?category=${category}`
+  );
+
+  const products = await response.json();
+
+  return (
+    <div>
+      {products.map((product: any) => (
+        <h2 key={product.id}>{product.name}</h2>
+      ))}
+    </div>
+  );
+}
+```
+
+The important idea:
+
+> `searchParams` tells the server **what data is needed**, and the server can fetch that data before rendering the page.
+
+---
+
+### 15. `searchParams` + CSR
+
+We can also use query parameters with **Client-Side Rendering**.
+
+For example:
+
+```text
+/products?category=phone
+```
+
+The browser can read the query parameter and fetch data from the client.
+
+A Client Component can use browser APIs such as `URLSearchParams`.
+
+```tsx
+"use client";
+
+import { useEffect, useState } from "react";
+
+export default function Products() {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+
+    const category = params.get("category");
+
+    fetch(`/api/products?category=${category}`)
+      .then((res) => res.json())
+      .then((data) => setProducts(data));
+  }, []);
+
+  return (
+    <div>
+      {products.map((product: any) => (
+        <h2 key={product.id}>{product.name}</h2>
+      ))}
+    </div>
+  );
+}
+```
+
+The flow is:
+
+```text
+Browser
+   │
+   │ /products?category=phone
+   ↓
+Browser reads URL
+   │
+   ↓
+category = "phone"
+   │
+   │ fetch()
+   ↓
+API
+   │
+   ↓
+Products
+   │
+   ↓
+setProducts()
+   │
+   ↓
+UI updates
+```
+
+---
+
+### 16. SSR vs CSR with `searchParams`
+
+The same URL can be used with different rendering approaches.
+
+```text
+/products?category=phone
+```
+
+### SSR with searchParams
+
+```text
+URL
+ ↓
+Next.js Server
+ ↓
+searchParams
+ ↓
+Fetch data
+ ↓
+Render
+ ↓
+Browser
+```
+
+### CSR with searchParams
+
+```text
+URL
+ ↓
+Browser
+ ↓
+Read searchParams
+ ↓
+Fetch data
+ ↓
+Update state
+ ↓
+Render UI
+```
+
+---
+
+### 17. Real Example: Search
+
+Suppose we create a product search page.
+
+URL:
+
+```text
+/products?search=laptop
+```
+
+Here:
+
+```text
+searchParams.search
+        ↓
+    "laptop"
+```
+
+We can use it for data fetching:
+
+```tsx
+const response = await fetch(
+  `https://api.example.com/products?search=${search}`
+);
+```
+
+Flow:
+
+```text
+/products?search=laptop
+          ↓
+searchParams.search
+          ↓
+       "laptop"
+          ↓
+      fetch API
+          ↓
+   Search results
+          ↓
+       Render UI
+```
+
+---
+
+### 18. Multiple `searchParams`
+
+URL:
+
+```text
+/products?category=phone&sort=price&page=2
+```
+
+We can have:
+
+```text
+category → phone
+sort     → price
+page     → 2
+```
+
+Example:
+
+```tsx
+export default async function ProductsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    category?: string;
+    sort?: string;
+    page?: string;
+  }>;
+}) {
+  const { category, sort, page } = await searchParams;
+
+  // Use these values for data fetching
+}
+```
+
+Conceptually:
+
+```text
+URL
+ │
+ ├── category = phone
+ ├── sort = price
+ └── page = 2
+          ↓
+    searchParams
+          ↓
+     Data Fetching
+          ↓
+      Product Data
+          ↓
+       Render UI
+```
+
+---
+
+### 19. Important Difference
+
+Do not confuse these concepts:
+
+### `searchParams`
+
+Answers:
+
+> **What values did the user put in the URL?**
+
+Example:
+
+```text
+?category=phone
+```
+
+### Data Fetching
+
+Answers:
+
+> **Where do I get the actual data from?**
+
+Example:
+
+```text
+API → products
+```
+
+### SSR
+
+Answers:
+
+> **Does the server render the page with the data?**
+
+### CSR
+
+Answers:
+
+> **Does the browser fetch/update the data and UI?**
+
+---
+
+## 20. Complete Mental Model
+
+The relationship can be remembered like this:
+
+```text
+                 URL
+                  │
+                  ↓
+        /products?category=phone
+                  │
+                  ↓
+            searchParams
+                  │
+                  ↓
+         category = "phone"
+                  │
+          ┌───────┴────────┐
+          ↓                ↓
+       Server            Browser
+          ↓                ↓
+    Data Fetching      Data Fetching
+          ↓                ↓
+         SSR              CSR
+          ↓                ↓
+       Render            Update UI
+          └───────┬────────┘
+                  ↓
+               UI
+```
+
+### Simple Example
+
+Think about an online store.
+
+User visits:
+
+```text
+/products?category=phone
+```
+
+The URL tells the application:
+
+> "The user wants products from the phone category."
+
+Then:
+
+```text
+searchParams
+      ↓
+category = phone
+      ↓
+Data Fetching
+      ↓
+Get phone products
+      ↓
+SSR or CSR
+      ↓
+Display products
+```
+
+### Key Takeaways
+
+> **`searchParams`** → reads values from the URL query string.
+---
+> **Data Fetching** → gets data from an API, database, or another source.
+---
+> **SSR** → server fetches/uses data and renders the page on the server.
+---
+> **CSR** → browser fetches/uses data and updates the UI on the client.
+
+The most useful mental model is:
+
+```text
+URL
+ ↓
+searchParams
+ ↓
+Data Fetching
+ ↓
+SSR or CSR
+ ↓
+UI
+```
+
+---
+
+## 21. `params` vs `searchParams`
 
 These are easy to confuse.
 
@@ -1303,21 +1844,6 @@ They come after the `?`.
 
 Multiple query parameters are separated by `&`.
 
-Example:
-
-```tsx
-// In Next.js, query strings are available through `searchParams`.
-export default async function ProductsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ category?: string }>;
-}) {
-  const { category } = await searchParams;
-
-  return <h1>Category: {category}</h1>;
-}
-```
-
 Conceptually:
 
 ```text
@@ -1361,9 +1887,12 @@ URL
 
 A simple way to remember:
 
-> **`params` = dynamic path values**  
+> **`params` = dynamic path values**
+---
 > **`searchParams` = query-string values**
+---
 > **`Route parameter` = identify something.**
+---
 > **`Query parameter` = filter, search, sort, or modify something.**
 
 ```text
@@ -1397,7 +1926,7 @@ Simple Comparison
 
 ---
 
-### 12. Using Route and URL Parameters Together
+### 22. Using Route and URL Parameters Together
 
 We can use both in the same URL.
 
@@ -1471,7 +2000,7 @@ searchParams.review = "latest"
 
 ---
 
-### 13. Complete Mental Model
+### 23. Complete Mental Model
 
 The overall relationship can be understood like this:
 
@@ -1532,7 +2061,7 @@ The key concepts I learned are:
 
 > Dynamic values extracted from the URL path.
 
-### `searchParams`
+### `searchParams` Summary
 
 > Values extracted from the URL query string.
 
