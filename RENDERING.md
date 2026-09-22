@@ -5,12 +5,22 @@
 The easiest way to remember the whole concept:
 
 > **`Rendering` → Creating the UI**
+---
 > **`Hydration` → Connecting React's client-side behavior to existing UI and make it interactive**
+---
 > **`Re-render` → Updating the UI after state/props change**
 
 ## 1. What is Rendering?
 
 **Rendering** is the process your browser uses to turn website code (HTML, CSS, JavaScript) into the visual page you see and interact with.
+
+Rendering in Next JS
+
+- [x] Client Side Rendering (CSR)
+- [x] Server Side Rendering (SSR) / Dynamic Rendering
+- [] Static Site Generation (SSG)
+- [] Incremental Static Regeneration (ISR)
+- [] Partial Pre-rendering (PPR)
 
 For example:
 
@@ -48,7 +58,8 @@ React / Next.js Code
 
 > **SSR = Server-Side Rendering**
 
-SSR means the server renders the page before sending the HTML to the browser.
+SSR means the server renders the page before sending the HTML to the browser. Render happens on server.
+Browser don't have to process. Only display the rendered page.
 
 A simplified flow:
 
@@ -68,6 +79,12 @@ Browser
 Display UI
 ```
 
+Simple Examples:
+
+- ✓ You get fully cooked (rendered) food
+- ✓ Restaurant (Server) already cooked (rendered) it
+- ✓ You see the website page immediately because the server already renders the page before sending the HTML to the browser
+
 For example:
 
 ```text
@@ -86,7 +103,7 @@ The server can prepare the product page and send the resulting HTML to the brows
 
 > **CSR = Client-Side Rendering**
 
-CSR means rendering happens in the browser using JavaScript.
+CSR means rendering happens in the browser using JavaScript. Render happens on client.
 
 A simplified flow:
 
@@ -103,6 +120,13 @@ Browser renders/updates UI
    ↓
 User sees UI
 ```
+
+Simple Example:
+
+- ✓ You get raw ingredients (HTML, CSS, JS)
+- ✓ You cook at home (Browser)
+- ✗ Takes time to loads JS, and google see initially blank page.
+- ✓ After loads JS, we will see the page in our own browser.
 
 For example, a Client Component can fetch data in the browser:
 
@@ -142,11 +166,13 @@ Here the browser runs the component and fetches the data.
 
 | SSR | CSR |
 | --- | --- |
-| Rendering happens on the server | Rendering/updates happen in the browser |
-| Server prepares HTML | Browser uses JavaScript to render/update UI |
+| Rendering happens on the Server | Rendering/updates happen in the Browser (Client) |
+| Server prepares HTML (faster first content ful paint) | Browser uses JavaScript to render/update UI (slower first load) |
 | Useful for server-rendered content | Useful for highly interactive UI |
 | Can fetch server-side data | Can fetch data from the browser |
 | Does not require `useEffect` for server fetching | Often uses `useEffect` or a client data library |
+| Next.js, Nuxt, Remix, traditional server framework | React (SPA), Vue SPA, Angular |
+| Better SEO because crawlers receive fully rendered HTML | Historically weaker (bots may struggle with JS) through modern bots improved |
 
 ### Simple Difference
 
@@ -179,9 +205,23 @@ Render / Update
 
 ---
 
+## Components in Next JS
+
+The main classification of component types resolves around where and how they are rendered and executed.
+
+There are primarily 2 core types of components in Next.js:
+
+- [x] Client Component
+- [x] Server Component
+
 ## 5. What is a Server Component?
 
 A **Server Component** is a React component that runs on the server.
+
+- ✓ Render completely on Server. No hydration.
+- ✗ You can't use Hooks.
+- ✗ You can't use Client Side JS (eventListener, window objects etc..).
+- ✓ But you can include Client Components inside Server Components. These nested components retain full access to client-side features like state, effects, and event handlers.
 
 In the Next.js App Router, components are **Server Components by default**.
 
@@ -244,6 +284,11 @@ A **Client Component** is a component that can use client-side React features su
 - Browser APIs
 - Interactive UI
 
+- ✓ Pre-render on the Server and Hydration on the Browser (Client).
+- ✓ You can use Hooks.
+- ✓ You can use Client Side JS (eventListener, window objects etc..).
+- ✗ You can't include Server component inside Client component.
+
 We tell Next.js that a component is a Client Component using:
 
 ```tsx
@@ -284,6 +329,35 @@ Interaction
 UI updates
 ```
 
+### Server and Client Components Work on Next.js
+
+```text
+Next JS Components
+
+- Server Component
+- Client Component
+
+  │
+  │
+  ▼
+
+React Server Component (RSC) Payload
+
+- Rendered Server Component.
+- Placeholders for client Components.
+- Any props passed through Server component to Client component.
+
+  │
+  │
+  ▼
+
+Browser (Client)
+
+- Immediate showing of Server Rendered HTML.
+- RSC payload to reconcile component trees.
+- JavaScript hydrate the Client component.
+```
+
 ---
 
 ## 7. Server Component vs Client Component
@@ -298,6 +372,9 @@ UI updates
 | Cannot use `useEffect` | Can use `useEffect` |
 | Cannot use browser event handlers directly | Can use event handlers |
 | Good for server-side data work | Good for interactive UI |
+| Excellent (Zero JS for that component) | Slower (hydration and JS  parsing) |
+| Import Client Components | Import Client Components |
+| Import Server Components | Can not Import Server Components |
 
 ### Easy Rule
 
@@ -438,9 +515,9 @@ Interactive UI Page (JavaScript now attached)
 │                                          │
 │  Initial Render                          │
 │  ┌────────────────────────────────────┐  │
-│  │        HTML + CSS                   │  │
+│  │        HTML + CSS                  │  │
 │  │                                    │  │
-│  │        👀 User sees UI             │  │
+│  │       User sees UI                 │  │          
 │  └────────────────────────────────────┘  │
 │                                          │
 └────────────────────┬─────────────────────┘
@@ -451,14 +528,14 @@ Interactive UI Page (JavaScript now attached)
 ┌──────────────────────────────────────────┐
 │                BROWSER                   │
 │                                          │
-│              ⚡ Hydration                │
+│             Hydration                    |                
 │                                          │
 │     React connects JavaScript            │
 │     behavior to the existing UI          │
 │                                          │
 │              ↓                           │
 │                                          │
-│        🖱️ Interactive Page              │
+│         Interactive Page                 │
 │                                          │
 │   • Click events work                    │
 │   • State works                          │
@@ -811,6 +888,8 @@ This is an important concept.
 
 A Server Component can **import and render** a Client Component.
 
+> Server will only fetch the API and render HTML and CSS of its own. Client component will be hydrated with client JavaScript later on the Browser (Client).
+
 Example:
 
 ```tsx
@@ -823,13 +902,15 @@ export default function Page() {
     <div>
       <h1>Hello</h1>
 
+      {/* Placeholder for Client Component */}
+      {/* This component will be pre-rendered on the server and Hydrated on the browser */}
       <Counter />
     </div>
   );
 }
 ```
 
-The Client Component:
+The Client Component: will be pre-rendered on the server and Hydrated on the browser.
 
 ```tsx
 "use client";
@@ -839,8 +920,14 @@ import { useState } from "react";
 export default function Counter() {
   const [count, setCount] = useState(0);
 
+  // Client Interactivity  
+  const handleClick = () => {
+    setCount(count + 1)
+    alert("Button Clicked" + Count)
+  }
+
   return (
-    <button onClick={() => setCount(count + 1)}>
+    <button onClick={handleClick}>
       {count}
     </button>
   );
@@ -1071,6 +1158,52 @@ Now connect everything together:
                             │
                             ↓
                    Client Interactivity
+
+
+Rendering, Hydration and Re-rendering
+
+                         USER
+                           │
+                           ↓
+                        Request
+                           │
+                           ↓
+                    Next.js Server
+                           │
+                           ↓
+                      Rendering
+                           │
+             ┌─────────────┴─────────────┐
+             ↓                           ↓
+       Server Component            Client Component
+             ↓                           ↓
+        Server work                Initial UI
+             │                           │
+             └─────────────┬─────────────┘
+                           ↓
+                       HTML/UI
+                           │
+                           ↓
+                       Browser
+                           │
+                           ↓
+                  Client JavaScript
+                           │
+                           ↓
+                      Hydration
+                           │
+                           ↓
+               Client Components
+                  become interactive
+                           │
+                           ↓
+                    User interacts
+                           │
+                           ↓
+                    State changes
+                           │
+                           ↓
+                      Re-render
 ```
 
 And for Components:
