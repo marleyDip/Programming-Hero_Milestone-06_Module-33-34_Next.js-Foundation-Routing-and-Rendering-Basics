@@ -61,19 +61,17 @@ const AboutPage = () => {
         {/* About Card */}
         <section className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 sm:p-8">
           <h2 className="text-2xl font-bold">Md. Sofian Hasan</h2>
-
           <p className="mt-4 leading-8 text-slate-400">
             I am a Full-Stack Web Developer interested in building modern,
             scalable, and user-focused web applications. I work with
             technologies such as React, Next.js, Nest.js, Node.js, Express,
             PostgreSQL, MongoDB, and TypeScript.
           </p>
-
           <p className="mt-4 leading-8 text-slate-400">
             This project is part of my Next.js learning journey, where I am
-            practicing the fundamentals of the App Router, pages, layouts,
-            dynamic routes, data loading, rendering, and Server & Client
-            Components.
+            practicing the fundamentals of the App Router, Routing, Pages,
+            Layouts, Dynamic Routes, Data Fetching, Rendering, Server & Client
+            Components, Image Optimization, Metadata, and Dynamic pages.
           </p>
         </section>
 
