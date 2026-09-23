@@ -12,9 +12,9 @@ lib/foods.ts
      Food Details
 */
 
+import FoodCard from "@/components/FoodCard";
 import { getFoods } from "@/lib/foods";
 import Link from "next/link";
-import FoodCard from "../components/FoodCard";
 
 export const metadata = {
   title: "Foods | Sofian Hasan",
@@ -102,9 +102,35 @@ const FoodsPage = async () => {
               </h2>
             </div>
 
-            <p className="text-sm text-slate-500">
-              Freshly loaded from the phi-lab food API
+            <p className="flex items-center gap-2 text-sm text-slate-500">
+              Freshly loaded from the{" "}
+              <a
+                href="https://phi-lab-server.vercel.app/api/v1/lab/foods/top-foods"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-1.5 font-medium text-slate-400 transition-colors duration-200 hover:text-pink-400"
+              >
+                <span className="border-b border-slate-700 transition-colors duration-200 group-hover:border-pink-400">
+                  Phi Lab Food API
+                </span>
+
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                >
+                  <path d="M7 17 17 7" />
+                  <path d="M7 7h10v10" />
+                </svg>
+              </a>
             </p>
+
+            {/* <p className="text-sm text-slate-500">
+              Freshly loaded from the phi-lab food API
+            </p> */}
           </div>
 
           {/* Food Grid */}

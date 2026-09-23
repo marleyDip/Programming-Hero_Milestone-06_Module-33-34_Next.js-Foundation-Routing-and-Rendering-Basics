@@ -1,5 +1,5 @@
+import Post from "@/components/Post";
 import Link from "next/link";
-import Post from "../components/Post";
 
 export const metadata = {
   title: "Blogs | Sofian Hasan",

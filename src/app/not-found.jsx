@@ -1,5 +1,5 @@
+import GoBackButton from "@/components/GoBackButton";
 import Link from "next/link";
-import GoBackButton from "./components/GoBackButton";
 
 const NotFound = () => {
   return (

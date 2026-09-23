@@ -24,8 +24,7 @@ lib/foods.ts
      Food Details
 */
 
-const FOODs_API =
-  "https://phi-lab-server.vercel.app/api/v1/lab/foods/top-foods";
+const FOODs_API = "https://phi-lab-server.vercel.app/api/v1/lab/foods/";
 
 /* interface FoodsResponse { 
     status: string; 
