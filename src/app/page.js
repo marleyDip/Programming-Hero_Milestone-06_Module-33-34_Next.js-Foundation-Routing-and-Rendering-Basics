@@ -89,6 +89,9 @@ const topics = [
 // hoverText: "group-hover:text-pink-400",
 
 export default function Home() {
+  // console.log("Hello from the Home component!");
+  // Output: Server Hello from the Home component!
+
   return (
     <main className="min-h-screen bg-slate-950 text-white">
       {/* Hero */}

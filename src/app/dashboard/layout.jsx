@@ -10,7 +10,7 @@ const DashboardLayout = ({ children }) => {
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col items-center justify-center">
+      <div className="drawer-content flex flex-col items-start justify-start my-10 md:my-16 mx-auto">
         {/* Page content here */}
         {children}
 
