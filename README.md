@@ -424,7 +424,7 @@ types/
 <div align="center">
 
 | Technology | Purpose |
-|---|---|
+| --- | --- |
 | ⚡ **Next.js** | React framework & App Router |
 | ⚛️ **React** | UI development |
 | 🔷 **TypeScript** | Type-safe development |
@@ -612,7 +612,7 @@ If you find this learning journey useful, feel free to explore the repository an
 <br />
 
 [![Explore Repository](https://img.shields.io/badge/Explore%20Repository-18181B?style=for-the-badge&logo=github&logoColor=white)](https://github.com/marleyDip/Programming-Hero_Milestone-06_Module-33-34_Next.js-Foundation-Routing-and-Rendering-Basics)
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-DB2777?style=for-the-badge&logo=vercel&logoColor=white)]([YOUR_LIVE_DEMO_URL](https://sofian-nextjs-routing-rendering.vercel.app/))
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-DB2777?style=for-the-badge&logo=vercel&logoColor=white)](https://sofian-nextjs-routing-rendering.vercel.app/)
 
 </div>
 
@@ -623,12 +623,7 @@ If you find this learning journey useful, feel free to explore the repository an
 **Learning Next.js Basics • Building one concept at a time.**
 
 <sub>
-Built & documented by
-[Md. Sofian Hasan](https://marleydip.netlify.app)
-•
-[GitHub](https://github.com/marleyDip)
-•
-[Live Demo](https://sofian-nextjs-routing-rendering.vercel.app/)
+Built & documented by [Md. Sofian Hasan](https://marleydip.netlify.app)•[GitHub](https://github.com/marleyDip)•[Live Demo](https://sofian-nextjs-routing-rendering.vercel.app/)
 </sub>
 
 </div>
