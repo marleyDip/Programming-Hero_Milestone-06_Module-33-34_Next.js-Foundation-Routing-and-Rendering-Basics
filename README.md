@@ -52,10 +52,10 @@ The project focuses on understanding **how Next.js works behind the scenes** whi
 
 This repository contains both practical implementations and learning notes from my Next.js journey.
 
-| Resource | Description | Live |
+| Resource Notes | Description | Live Link |
 | --- | --- | --- |
-| 🧭 [Routing Notes](./ROUTING.md) | Pages, layouts, navigation, dynamic routes, and route handling | [View Link](https://sofian-nextjs-routing-rendering.vercel.app/) |
-| 📘 [Rendering Notes](./RENDERING.md) | CSR, SSR, hydration, Server Components, Client Components, and data loading | [View Link](https://sofian-nextjs-routing-rendering.vercel.app/foods) |
+| 🧭 [Routing](./ROUTING.md) | Pages, layouts, navigation, dynamic routes, and route handling | [View](https://sofian-nextjs-routing-rendering.vercel.app/) |
+| 📘 [Rendering](./RENDERING.md) | CSR, SSR, hydration, Server Components, Client Components, and data loading | [View](https://sofian-nextjs-routing-rendering.vercel.app/foods) |
 
 > 🧠 **Learn the concept → Build it → Experiment → Understand it**
 
