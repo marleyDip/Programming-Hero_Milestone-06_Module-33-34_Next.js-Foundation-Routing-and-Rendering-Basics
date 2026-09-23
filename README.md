@@ -17,9 +17,13 @@ A hands-on Next.js learning project focused on **App Router, routing, rendering,
 
 <br />
 
-[![GitHub Stars](https://img.shields.io/github/stars/marleyDip/Programming-Hero_Milestone-06_Module-33-34_Next.js-Foundation-Routing-and-Rendering-Basics?style=flat-square&logo=github&color=yellow)](https://github.com/marleyDip/Programming-Hero_Milestone-06_Module-33-34_Next.js-Foundation-Routing-and-Rendering-Basics)
+<p align="center">
 
+[![GitHub Stars](https://img.shields.io/github/stars/marleyDip/Programming-Hero_Milestone-06_Module-33-34_Next.js-Foundation-Routing-and-Rendering-Basics?style=flat-square&logo=github&color=yellow)](https://github.com/marleyDip/Programming-Hero_Milestone-06_Module-33-34_Next.js-Foundation-Routing-and-Rendering-Basics)
+&nbsp;
 [![GitHub Forks](https://img.shields.io/github/forks/marleyDip/Programming-Hero_Milestone-06_Module-33-34_Next.js-Foundation-Routing-and-Rendering-Basics?style=flat-square&logo=github&color=blue)](https://github.com/marleyDip/Programming-Hero_Milestone-06_Module-33-34_Next.js-Foundation-Routing-and-Rendering-Basics)
+
+</p>
 
 <!-- <br /><br />
 
@@ -48,10 +52,10 @@ The project focuses on understanding **how Next.js works behind the scenes** whi
 
 This repository contains both practical implementations and learning notes from my Next.js journey.
 
-| Resource Notes | Description | Live Link |
+| Resource | Description | Live |
 | --- | --- | --- |
-| 🧭 [Routing](./ROUTING.md) | Pages, layouts, navigation, dynamic routes, and route handling | [View Notes](https://sofian-nextjs-routing-rendering.vercel.app/) |
-| 📘 [Rendering](./RENDERING.md) | CSR, SSR, hydration, Server Components, Client Components, and data loading | [View Notes](https://sofian-nextjs-routing-rendering.vercel.app/foods) |
+| 🧭 [Routing Notes](./ROUTING.md) | Pages, layouts, navigation, dynamic routes, and route handling | [View Link](https://sofian-nextjs-routing-rendering.vercel.app/) |
+| 📘 [Rendering Notes](./RENDERING.md) | CSR, SSR, hydration, Server Components, Client Components, and data loading | [View Link](https://sofian-nextjs-routing-rendering.vercel.app/foods) |
 
 > 🧠 **Learn the concept → Build it → Experiment → Understand it**
 
