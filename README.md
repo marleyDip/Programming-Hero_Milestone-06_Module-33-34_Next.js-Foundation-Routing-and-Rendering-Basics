@@ -3,7 +3,7 @@
 
 # ⚡ Next.js Foundation, Routing & Rendering
 
-### 🚀 Building One Concept at a Time
+## 🚀 Building One Concept at a Time
 
 A hands-on Next.js learning project focused on **App Router, routing, rendering, data loading, Server & Client Components, image optimization, metadata, and modern Next.js fundamentals.**
 
@@ -25,11 +25,11 @@ A hands-on Next.js learning project focused on **App Router, routing, rendering,
   <img src="https://img.shields.io/github/forks/marleyDip/Programming-Hero_Milestone-06_Module-33-34_Next.js-Foundation-Routing-and-Rendering-Basics?style=flat-square&logo=github&color=blue" alt="GitHub Forks" />
 </a>
 
-<br /><br />
+<!-- <br /><br />
 
 <a href="https://github.com/marleyDip/Programming-Hero_Milestone-06_Module-33-34_Next.js-Foundation-Routing-and-Rendering-Basics">
   <strong>⭐ Explore Repository</strong>
-</a>
+</a> -->
 
 </div>
 
@@ -615,6 +615,18 @@ If you find this learning journey useful, feel free to explore the repository an
 </div>
 
 ---
+
+## 📖 Learning Notes
+
+This repository contains both practical implementations and learning notes from my Next.js journey.
+
+| Resource | Description | Live |
+| --- | --- | --- |
+| 🧭 [Routing](./ROUTING.md) | Pages, layouts, navigation, dynamic routes, and route handling | [View Notes](https://sofian-nextjs-routing-rendering.vercel.app/) |
+| 📘 [Rendering](./RENDERING.md) | CSR, SSR, hydration, Server Components, Client Components, and data loading | [View Notes](https://sofian-nextjs-routing-rendering.vercel.app/foods) |
+| 💻 [Source Code](./) | Practical implementations and examples | [GitHub](./) |
+
+> 🧠 **Learn the concept → Build it → Experiment → Understand it**
 
 ## Learning Basic
 
