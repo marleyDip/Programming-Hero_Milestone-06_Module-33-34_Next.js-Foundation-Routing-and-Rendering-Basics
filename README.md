@@ -590,30 +590,29 @@ Build Better
 
 <div align="center">
 
-  <img src="https://skillicons.dev/icons?i=js,ts,react,nextjs,tailwind,nodejs,express,nestjs,mongodb,postgres" alt="Tech Stack" />
+  ![Tech Stack](https://skillicons.dev/icons?i=js,ts,react,nextjs,tailwind,nodejs,express,nestjs,mongodb,postgres)
 
   <br /><br />
 
-  <img src="https://img.shields.io/badge/MERN-Stack-61DAFB?style=for-the-badge" alt="MERN Stack" />
-  <img src="https://img.shields.io/badge/PERN-Stack-336791?style=for-the-badge" alt="PERN Stack" />
+  ![MERN Stack](https://img.shields.io/badge/MERN-Stack-61DAFB?style=for-the-badge)
+  ![PERN Stack](https://img.shields.io/badge/PERN-Stack-336791?style=for-the-badge)
 
 </div>
 
 ---
 
-## ⭐ Repository
+## **⭐ Repository**
 
 If you find this learning journey useful, feel free to explore the repository and follow along.
 
 <div align="center">
 
-### 🚀 Learn. Build. Break. Understand. Repeat.
+### **🚀 Learn. Build. Break. Understand. Repeat.**
 
 <br />
 
-<a href="https://github.com/marleyDip/Programming-Hero_Milestone-06_Module-33-34_Next.js-Foundation-Routing-and-Rendering-Basics">
-  <img src="https://img.shields.io/badge/Explore%20Repository-18181B?style=for-the-badge&logo=github&logoColor=white" alt="Explore Repository" />
-</a>
+[![Explore Repository](https://img.shields.io/badge/Explore%20Repository-18181B?style=for-the-badge&logo=github&logoColor=white)](https://github.com/marleyDip/Programming-Hero_Milestone-06_Module-33-34_Next.js-Foundation-Routing-and-Rendering-Basics)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-DB2777?style=for-the-badge&logo=vercel&logoColor=white)]([YOUR_LIVE_DEMO_URL](https://sofian-nextjs-routing-rendering.vercel.app/))
 
 </div>
 
@@ -623,6 +622,13 @@ If you find this learning journey useful, feel free to explore the repository an
 
 **Learning Next.js Basics • Building one concept at a time.**
 
-<sub>Built & documented by <a href="https://marleydip.netlify.app">Md. Sofian Hasan</a> • <a href="https://github.com/marleyDip">GitHub</a></sub>
+<sub>
+Built & documented by
+[Md. Sofian Hasan](https://marleydip.netlify.app)
+•
+[GitHub](https://github.com/marleyDip)
+•
+[Live Demo](https://sofian-nextjs-routing-rendering.vercel.app/)
+</sub>
 
 </div>
