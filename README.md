@@ -4231,5 +4231,3 @@ Make existing UI interactive
 ```
 
 > **The goal is not to memorize these terms. Understand where the code runs, where the rendering happens, and when the browser needs JavaScript.**
-
----

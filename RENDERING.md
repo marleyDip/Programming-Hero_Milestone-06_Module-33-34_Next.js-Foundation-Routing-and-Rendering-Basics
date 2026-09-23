@@ -277,6 +277,11 @@ Produces UI
 
 ## 6. What is a Client Component?
 
+- ✓ Pre-render on the Server and Hydration on the Browser (Client).
+- ✓ You can use Hooks.
+- ✓ You can use Client Side JS (eventListener, window objects etc..).
+- ✗ You can't include Server component inside Client component.
+
 A **Client Component** is a component that can use client-side React features such as:
 
 - `useState`
@@ -284,11 +289,6 @@ A **Client Component** is a component that can use client-side React features su
 - Event handlers
 - Browser APIs
 - Interactive UI
-
-- ✓ Pre-render on the Server and Hydration on the Browser (Client).
-- ✓ You can use Hooks.
-- ✓ You can use Client Side JS (eventListener, window objects etc..).
-- ✗ You can't include Server component inside Client component.
 
 We tell Next.js that a component is a Client Component using:
 
@@ -1502,5 +1502,3 @@ Make existing UI interactive
 ```
 
 > **The goal is not to memorize these terms. Understand where the code runs, where the rendering happens, and when the browser needs JavaScript.**
-
----
