@@ -311,6 +311,7 @@ export default function Home() {
       </section> */}
 
       {/* Footer */}
+
       <footer className="group border-t border-slate-800 py-8 text-center">
         <p className="text-sm text-slate-500">
           Learning Next.js Basics • Building one concept at a time.
@@ -322,9 +323,18 @@ export default function Home() {
             href="https://marleydip.netlify.app"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-medium text-slate-400 transition-colors group-hover:text-lime-500/80"
+            className="font-medium text-slate-400 transition-colors group-hover:text-lime-500/80 hover:text-pink-400"
           >
-            Md. Sofian Hasan.
+            Md. Sofian Hasan
+          </a>{" "}
+          •{" "}
+          <a
+            href="https://github.com/marleyDip/Programming-Hero_Milestone-06_Module-33-34_Next.js-Foundation-Routing-and-Rendering-Basics"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium text-slate-400 transition-colors group-hover:text-pink-400 hover:text-lime-500/80"
+          >
+            GitHub Repo
           </a>
         </p>
       </footer>
