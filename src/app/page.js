@@ -68,8 +68,8 @@ const topics = [
     number: "08",
     title: "Hydration",
     description:
-      "Understand how React hydration connects server-rendered HTML with client-side React.",
-    href: "/foods",
+      "Understand how React hydration connects server-rendered HTML with client-side React. Client component inside Server component.",
+    href: "/dashboard",
     color: "bg-red-500/10 text-red-400",
     hover: "hover:border-red-500/50 group-hover:text-red-400",
   },

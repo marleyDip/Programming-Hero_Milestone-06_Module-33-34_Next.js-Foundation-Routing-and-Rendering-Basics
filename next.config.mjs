@@ -28,7 +28,8 @@ const nextConfig = {
         protocol: "https",
         hostname: "res.cloudinary.com",
         // The double asterisk must cover the remaining path segments correctly
-        pathname: "/df4biggtk/**",
+
+        // pathname: "/df4biggtk/**",
       },
     ],
   },

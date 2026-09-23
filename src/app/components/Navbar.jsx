@@ -13,6 +13,10 @@ const Navbar = () => {
       </li>
 
       <li>
+        <NavLink href="/foods">Foods</NavLink>
+      </li>
+
+      <li>
         <NavLink href="/users">Users</NavLink>
       </li>
 
@@ -38,10 +42,6 @@ const Navbar = () => {
 
       <li>
         <NavLink href="/dashboard">Dashboard</NavLink>
-      </li>
-
-      <li>
-        <NavLink href="/showcase">Showcase</NavLink>
       </li>
     </>
   );
