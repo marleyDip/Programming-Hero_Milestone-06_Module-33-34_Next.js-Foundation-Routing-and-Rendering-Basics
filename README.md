@@ -615,15 +615,3 @@ If you find this learning journey useful, feel free to explore the repository an
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-DB2777?style=for-the-badge&logo=vercel&logoColor=white)](https://sofian-nextjs-routing-rendering.vercel.app/)
 
 </div>
-
----
-
-<div align="center">
-
-**Learning Next.js Basics • Building one concept at a time.**
-
-<sub>
-Built & documented by [Md. Sofian Hasan](https://marleydip.netlify.app)•[GitHub](https://github.com/marleyDip)•[Live Demo](https://sofian-nextjs-routing-rendering.vercel.app/)
-</sub>
-
-</div>
